@@ -1,0 +1,498 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Fragmenter</name>
+    </assembly>
+    <members>
+        <member name="T:Fragmenter.Corners">
+            <summary>
+            Corners class. Used to find the corners of a FeatureStroke so we
+            can fragment/segment the stroke.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.Corners.SMALL_WINDOW">
+            <summary>
+            Constant for a small end point window
+            </summary>
+        </member>
+        <member name="F:Fragmenter.Corners.LARGE_WINDOW">
+            <summary>
+            Constant for a large end point window
+            </summary>
+        </member>
+        <member name="F:Fragmenter.Corners.fStroke">
+            <summary>
+            The FeatureStroke to find corners for.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.Corners.#ctor(Featurefy.FeatureStroke)">
+            <summary>
+            Constructs a Corners object that we can find the corners for.
+            </summary>
+            <param name="fStroke">The FeatureStroke to find corners for</param>
+        </member>
+        <member name="M:Fragmenter.Corners.FindCorners">
+            <summary>
+            We have two functions here so that we can use the reference variable temp to pass information about certain
+            steps in the process back to the caller.
+            </summary>
+            <returns>The found corners of a FeatureStroke</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.FindCorners(System.Int32@)">
+            <summary>
+            Finds the Corners of this FeatureStroke
+            </summary>
+            <returns>The found corners of a FeatureStroke</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.findInitCorners(System.Double,System.Double,System.Boolean)">
+            <summary>
+            Find the initial corner estimations of a stroke, indicating likely places where a stroke can be split up into
+            corresponding substrokes.
+            </summary>
+            <param name="speedThreshold">Percent of the average speed of the stroke</param>
+            <param name="curveThreshold">Degrees per pixel</param>
+            <param name="useBoth">If true, use both thresholds to determine if the point should be included in the initial
+            set</param>
+            <returns>The indices where the stroke should be split up</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.trimCloseCorners(System.Int32[],System.Int32)">
+            <summary>
+            Removes corners from an array that are too close together. Also removes points that have
+            slow speed but very low curvature.
+            </summary>
+            <param name="corners">The corners in a stroke</param>
+            <param name="threshold">Threshold between indices (minimum distance between 2)</param>
+            <returns>The trimmed corners array</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.trimNoisyCorners(System.Int32[],System.Double,System.Double)">
+            <summary>
+            Removes corners where from the inputted corners array where user specified speed and curvature
+            thresholds are not met. In other words, we use this to combine our previous thresholds and see if certain
+            corners fail to be included into both categories.
+            
+            The basic idea is that you can relax thresholds here and see if some points fail miserably on
+            a certain condition.
+            
+            NOTE: I found that this provided bad results, so I don't actually use it but I've included
+            in here just the same.
+            </summary>
+            <param name="corners">The corners in a stroke</param>
+            <param name="speedThreshold">Speed the corner must be below</param>
+            <param name="curvThreshold">Curvature the corner must be below</param>
+            <returns>The trimmed corners array</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.mergeByArc(System.Int32[],System.Double)">
+            <summary>
+            Combine substrokes whose combined arc or line segments are within some
+            error of their individual segments summed.
+            </summary>
+            <param name="corners">The corners in a stroke</param>
+            <param name="errThreshold">The error allowance that a merged fragment must be below</param>
+            <returns>The trimmed corners array</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.mergeByLength(System.Int32[],System.Double)">
+            <summary>
+            Combines substrokes that are adjacent where one is less than some percentage threshold
+            of the other's length.
+            </summary>
+            <param name="corners">The corners in a stroke</param>
+            <param name="lengthThreshold">The percentage threshold that a substroke must be below to be merged</param>
+            <returns>The trimmed corners array</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.slopeAngle(System.Int32,System.Int32)">
+            <summary>
+            Computes the slope angle between two indices Arctan(rise over run)
+            </summary>
+            <param name="a">Index for first point</param>
+            <param name="b">Index for second point</param>
+            <returns>The slope angle between point[a] point[b] in degrees</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.distance(System.Int32,System.Int32)">
+            <summary>
+            Finds the Euclidean distance between two Points.
+            </summary>
+            <param name="a">Lower index</param>
+            <param name="b">Upper index</param>
+            <returns></returns>
+        </member>
+        <member name="M:Fragmenter.Corners.findLocalMinima(System.Double[],System.Double,System.Int32,System.Int32@)">
+            <summary>
+            Finds a local minima within an array of doubles.
+            </summary>
+            <param name="values">Values to look for a local minima</param>
+            <param name="threshold">The threshold line that the values must be less than before we assume a minima has been found</param>
+            <param name="startIndex">Where to start looking for the minima in the values array</param>
+            <param name="loopExit">Where we stopped looking</param>
+            <returns>The local minima's index within values</returns>
+        </member>
+        <member name="M:Fragmenter.Corners.findLocalMaxima(System.Double[],System.Double,System.Int32,System.Int32@)">
+            <summary>
+            Finds local maxima within an array of doubles
+            </summary>
+            <param name="values">Values to look for a local maxima</param>
+            <param name="threshold">The threshold line that the values must be greater than before we assume a maxima has been found</param>
+            <param name="startIndex">Where to start looking for the maxima in the values array</param>
+            <param name="loopExit">Where we stopped looking</param>
+            <returns>The local maxima's index within values</returns>
+        </member>
+        <member name="T:Fragmenter.Corners.FragmentType">
+            <summary>
+            An enumeration for the type of the Fragment: Line or Arc.
+            </summary>
+        </member>
+        <member name="T:Fragmenter.Fragmenter">
+            <summary>
+            Fragmenter application. Takes in MIT XML files and outputs the fragmented (a.k.a. segmented)
+            versions of those files.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.Fragmenter.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.Fragmenter.DirSearch(System.String,System.Collections.ArrayList@)">
+            <summary>
+            Perform a recursive directory search. http://support.microsoft.com/default.aspx?scid=kb;en-us;303974
+            </summary>
+            <param name="sDir">Directory to search recursively</param>
+            <param name="rFiles">Array to add the files to</param>
+        </member>
+        <member name="M:Fragmenter.Fragmenter.fragmentSketch(Sketch.Sketch,Featurefy.FeatureStroke[]@)">
+            <summary>
+            Fragments a given Sketch.Sketch and returns the fragmented version.
+            Also outputs the Featurefied strokes.
+            </summary>
+            <param name="sketch">Sketch to fragment</param>
+            <param name="fStrokes">FeatureStrokes to be created and output</param>
+            <returns>Fragmented sketch</returns>
+        </member>
+        <member name="T:Fragmenter.Fragment">
+            <summary>
+            Summary description for Fragment.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.Fragment.#ctor">
+            <summary>
+            Empty Constructor.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.Fragment.fragmentSketch(Sketch.Sketch)">
+            <summary>
+            Fragments a given Sketch.Sketch.
+            </summary>
+            <param name="sketch">Sketch to fragment</param>
+        </member>
+        <member name="T:Fragmenter.DebugForm">
+            <summary>
+            DebugForm class. Creates a DebugForm that is used for debugging purposes.
+            Can display the Strokes, their corners, highlight individual Strokes, and display
+            graphical information pertaining to the Stroke's speed and curvature.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.fStrokes">
+            <summary>
+            FeatureStrokes to show debug information for.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.oInk">
+            <summary>
+            InkOverlay so that we can select the Strokes, apply transformations, etc.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.panel">
+            <summary>
+            Panel to draw the Strokes on. Holds the InkOverlay.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.panelState">
+            <summary>
+            The current state that the drawing panel is in.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.prevScale">
+            <summary>
+            Previous scaling factor. Used in resizing the Ink and the Form.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.newScale">
+            <summary>
+            New scaling factor. Used in resizing the Ink and the Form.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.totalScale">
+            <summary>
+            Total scaling factor. Used in resizing the Ink and the Form.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.ScrollPos">
+            <summary>
+            Current scroll bar positions for the horizontal (x) and vertical (y) scroll bars.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.strokeRBtn">
+            <summary>
+            Radio button to set the drawing mode to show Strokes.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.graphRBtn">
+            <summary>
+            Radio button to set the drawing mode to show graphical information.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.strokeBox">
+            <summary>
+            Combo box listing all of the Strokes. 
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.label1">
+            <summary>
+            Part of the legend for the graphical information
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.label2">
+            <summary>
+            Part of the legend for the graphical information
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.label3">
+            <summary>
+            Part of the legend for the graphical information
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.label4">
+            <summary>
+            Part of the legend for the graphical information
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.label5">
+            <summary>
+            Part of the legend for the graphical information
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.label6">
+            <summary>
+            Part of the legend for the graphical information
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.hScrollBar">
+            <summary>
+            Horizontal scroll bar for the panel
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.vScrollBar">
+            <summary>
+            Vertical scroll bar for the panel
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.zoomOutBtn">
+            <summary>
+            Zoom out button. Zooms the ink out by a certain factor.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.zoomInBtn">
+            <summary>
+            Zoom in button. Zooms the ink in by a certain factor.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.panelWidthBox">
+            <summary>
+            Checkbox to see if we should keep the ink resized to the panel width.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.zoomTextBox">
+            <summary>
+            Textbox specifying the current zoom factor.
+            </summary>
+        </member>
+        <member name="F:Fragmenter.DebugForm.zoomLabel">
+            <summary>
+            Label for some of the zoom objects.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.#ctor(Featurefy.FeatureStroke[],System.String)">
+            <summary>
+            Constructs a debug display window for an array of FeatureStrokes.
+            </summary>
+            <param name="fStrokes">FeatureStrokes to provide debug information for</param>
+            <param name="filename">Filename to display in the title</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.GraphForm_Resize(System.Object,System.EventArgs)">
+            <summary>
+            Occurs whenever the form is resized.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.FormResize">
+            <summary>
+            Resizes the window such that all of the buttons and panels remain in their relative
+            places, and the ink stretches with the window.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.oInk_SelectionChanged(System.Object,System.EventArgs)">
+            <summary>
+            Sets the selected index of the stroke box to be the (first) selected stroke's Id.
+            This in turn updates what stroke is highlighted once the panel is refreshed.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.strokeRBtn_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Switches the panel's drawing state to be for a stroke display.
+            The stroke display shows the stroke with the found corners to fragment.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.graphRBtn_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Switches the panel's drawing state to be for a graphical display.
+            The graphical display shows the speed and curvature information.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.strokeBox_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            Updates the panel depending on what stroke is selected
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.showKey">
+            <summary>
+            Hides the key (or labels) for the Graphical Display
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.hideKey">
+            <summary>
+            Shows the key (or labels) for the Graphical Display
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.hScrollBar_Scroll(System.Object,System.Windows.Forms.ScrollEventArgs)">
+            <summary>
+            Activates whenever the horizontal scroll bar is used.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes a scroll object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.vScrollBar_Scroll(System.Object,System.Windows.Forms.ScrollEventArgs)">
+            <summary>
+            Activates whenever the vertical scroll bar is used.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes a scroll object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.HandleScroll">
+            <summary>
+            Creates a new ViewTransform matrix that shifts the image based on the scrollbar positions.
+            Converts the scrollbar pixels into Ink Space coordinates and then shifts the rendered ink
+            by that amount.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.panelWidthBox_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            If the checkbox is checked, then update the ink's zoom based on the panel width. Otherwise
+            we will update the zoom based on the value in the zoom text box.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.zoomTextBox_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Updates the zoom factor of the image from the text entered into the zoom text box
+            every time the text is changed.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.zoomInBtn_Click(System.Object,System.EventArgs)">
+            <summary>
+            Zooms in by a factor of 1 each time you click the button
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.zoomOutBtn_Click(System.Object,System.EventArgs)">
+            <summary>
+            Zooms out by a factor of 1 each time you click the button.
+            When the zoom scale is less than 1, it divides the zoom by half each time.
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.getScaleFromBox">
+            <summary>
+            Updates the zoom factor of the image from the text entered into the zoom text box.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.matlabBtn_Click(System.Object,System.EventArgs)">
+            <summary>
+            Writes a .txt file that contains information to build a MATLAB graph from.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.panel_Paint(System.Object,System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Paints the panel according to the panel's drawing state
+            </summary>
+            <param name="sender">Reference to the object that raised the event</param>
+            <param name="e">Passes an object specific to the event that is being handled</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.PaintStrokes(System.Int32)">
+            <summary>
+            Paints all of the strokes.
+            </summary>
+        </member>
+        <member name="M:Fragmenter.DebugForm.HighlightCorners(System.Drawing.Graphics,System.Int32,System.Drawing.Color)">
+            <summary>
+            Highlights the found corners of a given FeatureStroke.
+            </summary>
+            <param name="g">Graphics for the object</param>
+            <param name="index">Index of the FeatureStroke to highlight the corners for</param>
+            <param name="color">Color of the corners</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.PaintSpeedGraph(System.Int32)">
+            <summary>
+            Draws a graphical display of the speed information of a stroke.
+            </summary>
+            <param name="index">Stroke index to draw the speed for</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.PaintCurveGraph(System.Int32)">
+            <summary>
+            Draws a graphical display of the curvature information of a stroke.
+            </summary>
+            <param name="index">Stroke index to draw the speed for</param>
+        </member>
+        <member name="M:Fragmenter.DebugForm.PaintCorners(System.Int32)">
+            <summary>
+            Draws where the corners of a stroke should be, relative to the speed and curvature display.
+            </summary>
+            <param name="index">Stroke index to draw the speed for</param>
+        </member>
+        <member name="T:Fragmenter.DebugForm.PanelState">
+            <summary>
+            If the panel should be showing Strokes or Graphical information.
+            </summary>
+        </member>
+    </members>
+</doc>

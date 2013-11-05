@@ -1,0 +1,967 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Featurefy</name>
+    </assembly>
+    <members>
+        <member name="T:Featurefy.LeastSquares">
+            <summary>
+            LeastSquares class. Contains methods for calculating the least squares
+            fit for a line and for a circle.
+            </summary>
+        </member>
+        <member name="M:Featurefy.LeastSquares.leastSquaresLineFit(System.Drawing.PointF[],System.Double@,System.Double@)">
+            <summary>
+            Finds the least squares fit parameters for a line of type y = mx + b.
+            </summary>
+            <param name="points">Points to fit a least squares line to</param>
+            <param name="m">Slope of the line</param>
+            <param name="b">Vertical shift of the line</param>
+            <returns>Error of the line fit (actual / theoretical)</returns>
+        </member>
+        <member name="M:Featurefy.LeastSquares.leastSquaresLineFit(System.Drawing.PointF[],System.Int32,System.Int32,System.Double@,System.Double@)">
+            <summary>
+            Finds the least squares fit parameters for a line of type y = mx + b.
+            </summary>
+            <param name="points">Points to fit a least squares line to</param>
+            <param name="startIndex">Start index of the points to use</param>
+            <param name="endIndex">End index of the points to use</param>
+            <param name="m">Slope of the line</param>
+            <param name="b">Vertical shift of the line</param>
+            <returns>Error of the line fit (actual / theoretical)</returns>
+        </member>
+        <member name="M:Featurefy.LeastSquares.leastSquaresLineFit(System.Drawing.PointF[],System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            Finds the least squares fit parameters for a line of type y = mx + b.
+            </summary>
+            <param name="points">Points to fit a least squares line to</param>
+            <param name="m">Slope of the line</param>
+            <param name="m_top">Numerator of the slope</param>
+            <param name="m_bot">Denominator of the slope</param>
+            <param name="b">Vertical shift of the line</param>
+            <returns>Error of the line fit (actual / theoretical)</returns>
+        </member>
+        <member name="M:Featurefy.LeastSquares.leastSquaresLineFit(System.Drawing.PointF[],System.Int32,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            Finds the least squares fit parameters for a line of type y = mx + b.
+            </summary>
+            <param name="points">Points to fit a least squares line to</param>
+            <param name="startIndex">Start index of the points to use</param>
+            <param name="endIndex">End index of the points to use</param>
+            <param name="m">Slope of the line</param>
+            <param name="m_top">Numerator of the slope</param>
+            <param name="m_bot">Denominator of the slope</param>
+            <param name="b">Vertical shift of the line</param>
+            <returns>Error of the line fit (actual / theoretical)</returns>
+        </member>
+        <member name="M:Featurefy.LeastSquares.leastSquaresCircleFit(System.Drawing.PointF[],System.Double@,System.Double@,System.Double@)">
+            <summary>
+            Finds the LSQ Circle fit for a series of points and returns the uncertainty.
+            Uses out variables x0, y0, and r to represent a circle calculation.
+            Circle: r = Math.Sqrt((x - x0)^2 + (y - y0)^2)  
+            </summary>
+            <param name="points">Points to use for the LSQ fit</param>
+            <param name="x0">The circle's center point x-coordinate</param>
+            <param name="y0">The circle's center point y-coordinate</param>
+            <param name="r">The circle's radius</param>
+            <returns>Error of the fit (actual / theoretical)</returns>
+        </member>
+        <member name="M:Featurefy.LeastSquares.leastSquaresCircleFit(System.Drawing.PointF[],System.Int32,System.Int32,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            Finds the LSQ Circle fit for a series of points and returns the uncertainty.
+            Uses out variables x0, y0, and r to represent a circle calculation.
+            Circle: r = Math.Sqrt((x - x0)^2 + (y - y0)^2)  
+            </summary>
+            <param name="points">Points to use for the LSQ fit</param>
+            <param name="startIndex">Start index of the points to use</param>
+            <param name="endIndex">End index of the points to use</param>
+            <param name="x0">The circle's center point x-coordinate</param>
+            <param name="y0">The circle's center point y-coordinate</param>
+            <param name="r">The circle's radius</param>
+            <returns>Error of the fit (actual / theoretical)</returns>
+        </member>
+        <member name="T:Featurefy.ArcLength">
+            <summary>
+            ArcLength class. Creates arc length profiles for the Points
+            given, where each Point has it's associated arc length from the
+            start of the Stroke or Substroke to that Point.
+            </summary>
+        </member>
+        <member name="F:Featurefy.ArcLength.points">
+            <summary>
+            The Points to calculate arc length information for
+            </summary>
+        </member>
+        <member name="F:Featurefy.ArcLength.arcLengthProfile">
+            <summary>
+            The arc length profile for the set of Points
+            </summary>
+        </member>
+        <member name="M:Featurefy.ArcLength.#ctor(Sketch.Point[])">
+            <summary>
+            Creates the arc length information for a given set of Points.
+            The computations are lazy, and variables are only initialized
+            when called.
+            </summary>
+            <param name="points">Given Points</param>
+        </member>
+        <member name="M:Featurefy.ArcLength.distance(System.Int32,System.Int32)">
+            <summary>
+            Computes the Euclidean distance between two Points.
+            </summary>
+            <param name="a">First Point's index</param>
+            <param name="b">Second Point's index</param>
+            <returns>The Euclidean distance between the given Points</returns>
+        </member>
+        <member name="M:Featurefy.ArcLength.arcLength">
+            <summary>
+            Computes the total arc length of these Points
+            </summary>
+            <returns>The total arc length of the points</returns>
+        </member>
+        <member name="M:Featurefy.ArcLength.calcArcLengthProfile">
+            <summary>
+            Calculates the arc length profile of the stroke.
+            </summary>
+            <returns>The arc length profile of the stroke</returns>
+        </member>
+        <member name="M:Featurefy.ArcLength.GetLength(System.Int32,System.Int32)">
+            <summary>
+            Computes the arc length between two indices of a stroke.
+            </summary>
+            <param name="a">Lower index</param>
+            <param name="b">Upper index</param>
+            <returns></returns>
+        </member>
+        <member name="M:Featurefy.ArcLength.computeMinMax">
+            <summary>
+            Find the minimum and maximum values for x and y
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.Width">
+            <summary>
+            Get the Width
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.Height">
+            <summary>
+            Get the Height
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.Diagonal">
+            <summary>
+            Get the Diagonal
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.InkDensity">
+            <summary>
+            Get the InkDensity
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.CircularInkDensity">
+            <summary>
+            Get the CircularInkDensity
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.Profile">
+            <summary>
+            Returns the arc length profile for the set of Points.
+            Calculates it once if no profile currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.ArcLength.TotalLength">
+            <summary>
+            Returns the total arc length of the stroke.
+            </summary>
+        </member>
+        <member name="T:Featurefy.Curvature">
+            <summary>
+            Curvature class. Creates curvature profiles for the Points
+            given, where each point can have a curvature in degrees/pixel.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.SMALL_WINDOW">
+            <summary>
+            Constant for a small end point window
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.LARGE_WINDOW">
+            <summary>
+            Constant for a large end point window
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.points">
+            <summary>
+            The Points to calculate curvature information for
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.arcLengthProfile">
+            <summary>
+            The arc length profile for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.tanAngleProfile">
+            <summary>
+            The tangent angle profile for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.avgCurv">
+            <summary>
+            The average (absolute value) curvature for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.minCurv">
+            <summary>
+            The minimum (absolute value) curvature for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.maxCurv">
+            <summary>
+            The maximum (absolute value) curvature for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.curvProfile">
+            <summary>
+            The (un-normalized) curvature profile for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Curvature.normCurvProfile">
+            <summary>
+            The normalized curvature profile for the set of Points
+            </summary>
+        </member>
+        <member name="M:Featurefy.Curvature.#ctor(Sketch.Point[],System.Double[],System.Double[])">
+            <summary>
+            Creates the curvature information for a given set of Points.
+            The computations are lazy, and variables are only initialized
+            when called.
+            </summary>
+            <param name="points">Given Points</param>
+            <param name="arcLengthProfile">The arc length profile for the given Points</param>
+            <param name="tanAngleProfile">The tangent angle profile for the given Points</param>
+        </member>
+        <member name="M:Featurefy.Curvature.curvature(System.Int32)">
+            <summary>
+            Calculates the curvature of a point at a given index. Curvature is equal to
+            the LSQ Line slope of the tangent angle vs. arc length
+            </summary>
+            <param name="index">The index of the point to calculate curvature for</param>
+            <returns>The curvature of the point</returns>
+        </member>
+        <member name="M:Featurefy.Curvature.averageCurvature">
+            <summary>
+            Compute the average curvature of the set of Points.
+            Does not take into account a certain number of Points on each end, since these
+            sections are known to contain hooks.
+            </summary>
+            <returns>The average curvature</returns>
+        </member>
+        <member name="M:Featurefy.Curvature.calcCurvProfile">
+            <summary>
+            Computes the curvature at each Point and creates a double array of it all.
+            </summary>
+            <returns>The double array of curvature values</returns>
+        </member>
+        <member name="M:Featurefy.Curvature.calcNormCurvProfile">
+            <summary>
+            Computes the normalized curvature at each point and creates a double 
+            array of it all.
+            </summary>
+            <returns>The double array of curvature values</returns>
+        </member>
+        <member name="M:Featurefy.Curvature.newCurvCalculator">
+            <summary>
+            Trying out something new from Yu's paper...
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Featurefy.Curvature.AverageCurvature">
+            <summary>
+            Returns the average curvature for the set of Points.
+            Calculates it once if no average curvature currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Curvature.MinimumCurvature">
+            <summary>
+            Returns the minimum curvature for the set of Points.
+            Calculates it once if no minimum curvature currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Curvature.MaximumCurvature">
+            <summary>
+            Returns the maximum curvature for the set of Points.
+            Calculates it once if no maximum curvature currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Curvature.Profile">
+            <summary>
+            Returns the (un-normalized) curvature profile for the set of Points.
+            Calculates it once if no profile currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Curvature.NormProfile">
+            <summary>
+            Returns the normalized curvature profile for the set of Points.
+            Calculates it once if no profile currently exists.
+            </summary>
+        </member>
+        <member name="T:Featurefy.CleanSketch">
+            <summary>
+            Summary description for CleanSketch.
+            </summary>
+        </member>
+        <member name="F:Featurefy.CleanSketch.sketch">
+            <summary>
+            Stored, cleaned sketch
+            </summary>
+        </member>
+        <member name="M:Featurefy.CleanSketch.#ctor(Sketch.Sketch)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="sketch"></param>
+        </member>
+        <member name="M:Featurefy.CleanSketch.CleanSubstroke(Sketch.Substroke)">
+            <summary>
+            Removes overlapping Points from a Substroke. Two Points are considered
+            to overlap if their X and Y coordinates are the same. If a set of overlapping
+            Points is removed, a new Point will take their place consisting of the last Point's
+            Id, Name, and Time, but the largest Pressure value between all Points in the set.
+            </summary>
+            <param name="substroke">Substroke to clean</param>
+        </member>
+        <member name="P:Featurefy.CleanSketch.CleanedSketch">
+            <summary>
+            Returns the cleaned Sketch.Sketch.
+            </summary>
+        </member>
+        <member name="T:Featurefy.Spatial">
+            <summary>
+            Spatial class. Creates spatial information for the Points
+            given, such as the average point.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Spatial.points">
+            <summary>
+            The Points to calculate spatial information for.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Spatial.boundingBox">
+            <summary>
+            The bounding box for the given Points.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Spatial.averagePoint">
+            <summary>
+            The average, or center point of the set of Points.
+            </summary>
+        </member>
+        <member name="M:Featurefy.Spatial.#ctor(Sketch.Point[])">
+            <summary>
+            Computes some Spatial spatial information from the given
+            set of Points.
+            </summary>
+            <param name="points"></param>
+        </member>
+        <member name="M:Featurefy.Spatial.computeAveragePoint">
+            <summary>
+            Finds the average Point for the current set of Points.
+            </summary>
+            <returns>A Point that is the average of the current Points</returns>
+        </member>
+        <member name="M:Featurefy.Spatial.distance(Sketch.Point,Sketch.Point)">
+            <summary>
+            Calculates the Euclidean distance between two points
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Featurefy.Spatial.AveragePoint">
+            <summary>
+            Returns a Point consisting of the averages of the set of Points.
+            Averages the X, Y, Time, and Pressure.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Spatial.FirstPoint">
+            <summary>
+            Returns the first Point in the set.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Spatial.LastPoint">
+            <summary>
+            Returns the last Point in the set.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Spatial.DistanceFromFirstToLast">
+            <summary>
+            Returns the distance from the first point to the last point.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Spatial.UpperLeft">
+            <summary>
+            Returns the upper-left corner for the points.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Spatial.LowerRight">
+            <summary>
+            Returns the upper-left corner for the points.
+            </summary>
+        </member>
+        <member name="T:Featurefy.Spatial.BoundingBox">
+            <summary>
+            Stores BoundingBox information for Sketch.Points in the form of an upper-left
+            corner and a lower-right corner
+            </summary>
+        </member>
+        <member name="F:Featurefy.Spatial.BoundingBox.upperLeft">
+            <summary>
+            Stores the upper-left corner of the bounding box
+            </summary>
+        </member>
+        <member name="F:Featurefy.Spatial.BoundingBox.lowerRight">
+            <summary>
+            Stores the lower-right corner of the bounding box
+            </summary>
+        </member>
+        <member name="M:Featurefy.Spatial.BoundingBox.#ctor(Sketch.Point[])">
+            <summary>
+            Constructor. Calculates a bounding box for the given set of points, and sets the
+            upperLeft and lowerRight variables to the corresponding bounding box values.
+            </summary>
+            <param name="points">Points of a (sub)stroke</param>
+        </member>
+        <member name="P:Featurefy.Spatial.BoundingBox.UpperLeft">
+            <summary>
+            Returns the upper-left corner of the bounding box.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Spatial.BoundingBox.LowerRight">
+            <summary>
+            Returns the lower-right corner of the bounding box.
+            </summary>
+        </member>
+        <member name="T:Featurefy.Normal">
+            <summary>
+            Summary description for Normal.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Normal.substrokes">
+            <summary>
+            Substrokes
+            </summary>
+        </member>
+        <member name="F:Featurefy.Normal.featureStrokes">
+            <summary>
+            FeatureStrokes
+            </summary>
+        </member>
+        <member name="F:Featurefy.Normal.features">
+            <summary>
+            Normalized features
+            </summary>
+        </member>
+        <member name="M:Featurefy.Normal.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Featurefy.Normal.#ctor(Sketch.Stroke[])">
+            <summary>
+            Constructor
+            </summary>
+            <param name="strokes">The Strokes to be normalized</param>
+        </member>
+        <member name="M:Featurefy.Normal.#ctor(Sketch.Substroke[])">
+            <summary>
+            Constructor
+            </summary>
+            <param name="substrokes">The Substrokes to be normalized</param>
+        </member>
+        <member name="M:Featurefy.Normal.addSubstroke(Sketch.Substroke)">
+            <summary>
+            Add a Substroke that will be normalized
+            </summary>
+            <param name="substroke"></param>
+        </member>
+        <member name="M:Featurefy.Normal.computeFeatures">
+            <summary>
+            Compute the normalized features from all the Substrokes that were added to this Normal
+            </summary>
+        </member>
+        <member name="P:Featurefy.Normal.Features">
+            <summary>
+            Get the normalized features
+            </summary>
+        </member>
+        <member name="T:Featurefy.FeatureStroke">
+            <summary>
+            FeatureStroke class. Takes in a regular Stroke and "Featurefies" it by
+            assigning profiles for speed, arc length, slope, and curvature.
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.points">
+            <summary>
+            Points of the Substroke to "featurefy"
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.speed">
+            <summary>
+            Speed information for the given Substroke
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.arcLength">
+            <summary>
+            Arc length information for the given Substroke
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.slope">
+            <summary>
+            Slope information for the given Substroke
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.curvature">
+            <summary>
+            Curvature information for the given Substroke
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.spatial">
+            <summary>
+            Spatial spatial information for the given Substroke
+            </summary>
+        </member>
+        <member name="F:Featurefy.FeatureStroke.id">
+            <summary>
+            The Sketch.Stroke Id that maps this FeatureStroke to a regular Stroke
+            </summary>
+        </member>
+        <member name="M:Featurefy.FeatureStroke.#ctor(Featurefy.FeatureStroke)">
+            <summary>
+            Constructs a new FeatureStroke from an existing one.
+            </summary>
+            <param name="fStroke">The given FeatureStroke to copy</param>
+        </member>
+        <member name="M:Featurefy.FeatureStroke.#ctor(Sketch.Stroke)">
+            <summary>
+            Finds the features of a Stroke. Converts the Stroke into a single Substroke first, 
+            since we really always want features to be associated with substrokes.
+            </summary>
+            <param name="stroke">Stroke to find features for</param>
+        </member>
+        <member name="M:Featurefy.FeatureStroke.#ctor(Sketch.Substroke)">
+            <summary>
+            Finds the features of a Substroke
+            </summary>
+            <param name="substroke">Substroke to find features for</param>
+        </member>
+        <member name="M:Featurefy.FeatureStroke.computeAll">
+            <summary>
+            Computes all of the Profiles.
+            This really isn't necessary. Everything is lazy and calculates when you need it.
+            </summary>
+        </member>
+        <member name="M:Featurefy.FeatureStroke.Clone">
+            <summary>
+            Clones a FeatureStroke.
+            </summary>
+            <returns>A new, cloned FeatureStroke</returns>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.Points">
+            <summary>
+            Returns the Points of the Featurefied Stroke.
+            </summary>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.Spatial">
+            <summary>
+             Returns the Spatial information for the substroke.
+            </summary>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.ArcLength">
+            <summary>
+            Returns the ArcLength information for the substroke.
+            </summary>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.Slope">
+            <summary>
+            Returns the Slope information for the substroke.
+            </summary>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.Speed">
+            <summary>
+            Returns the Speed information for the substroke.
+            </summary>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.Curvature">
+            <summary>
+            Returns the Curvature information for the FeatureStroke.
+            </summary>
+        </member>
+        <member name="P:Featurefy.FeatureStroke.Id">
+            <summary>
+            Returns the Guid information for the FeatureStroke.
+            </summary>
+        </member>
+        <member name="T:Featurefy.Slope">
+            <summary>
+            Slope class. Creates slope information for the Points given.
+            Generates a tangent angle profile, as well as least squares line and 
+            circle fits.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.points">
+            <summary>
+            The Points to calculate angle information for
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.simplePoints">
+            <summary>
+            The simplified (x, y) point array for calculation purposes
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.tanAngleProfile">
+            <summary>
+            The tangent angle profile for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.uncleanProfile">
+            <summary>
+            An uncleaned tangent angle profile. Used for debugging purposes.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.lineFit">
+            <summary>
+            The Least Squares line fit for the set of Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.circleFit">
+            <summary>
+            The Least Squares circle fit for the set of Points
+            </summary>
+        </member>
+        <member name="M:Featurefy.Slope.#ctor(Sketch.Point[])">
+            <summary>
+            Creates the tangent angle and least squares information for a given set of Points.
+            The tangent angle computations are lazy, and variables are only initialized
+            when called.
+            </summary>
+            <param name="points">Given Points</param>
+        </member>
+        <member name="M:Featurefy.Slope.initSimplePts">
+            <summary>
+            Initializes the System.Drawing.PointF[] array we will be using to simplify our calculations.
+            </summary>
+        </member>
+        <member name="M:Featurefy.Slope.initLsq">
+            <summary>
+            Initialize (and calculate) our Least Squares line and circle fits for the entire set of points.
+            </summary>
+        </member>
+        <member name="M:Featurefy.Slope.findTangentAngle(System.Int32)">
+            <summary>
+            Finds the tangent angle at the current index of the stroke.
+            </summary>
+            <param name="index">Index of the stroke</param>
+            <returns>Tangent angle (in radians)</returns>
+        </member>
+        <member name="M:Featurefy.Slope.calcTanAngleProfile">
+            <summary>
+            Computes the tangent angle at every Point.
+            </summary>
+            <returns>A double array of size points.Length that is indexed with the tangent angle information</returns>
+        </member>
+        <member name="M:Featurefy.Slope.cleanProfile(System.Double[])">
+            <summary>
+            
+            </summary>
+            <param name="profile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Featurefy.Slope.circleTangent(System.Drawing.PointF,System.Double,System.Double,System.Double,System.Double@,System.Double@)">
+            <summary>
+            Finds the tangent of a point on the given circle.
+            </summary>
+            <param name="p">Point on the circle</param>
+            <param name="x0">Center x-coordinate of the circle</param>
+            <param name="y0">Center y-coordinate of the circle</param>
+            <param name="r">Radius of the circle</param>
+            <param name="m">Slope of the tangent line</param>
+            <param name="b">Vertical shift of the tangent line</param>
+        </member>
+        <member name="M:Featurefy.Slope.circleTangent(System.Drawing.PointF,System.Double,System.Double,System.Double,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            Finds the tangent of a point on the given circle.
+            </summary>
+            <param name="p">Point on the circle</param>
+            <param name="x0">Center x-coordinate of the circle</param>
+            <param name="y0">Center y-coordinate of the circle</param>
+            <param name="r">Radius of the circle</param>
+            <param name="m">Slope of the tangent line</param>
+            <param name="m_top">Numerator of the slope, m</param>
+            <param name="m_bot">Denominator of the slope, m</param>
+            <param name="b">Vertical shift of the tangent line</param>
+        </member>
+        <member name="M:Featurefy.Slope.direction(Sketch.Point,Sketch.Point)">
+            <summary>
+            Compute the direction between the two points
+            </summary>
+            <param name="p1"></param>
+            <param name="p2"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Featurefy.Slope.TanProfile">
+            <summary>
+            Returns the tangent angle profile for the set of Points.
+            Calculates it once if no profile currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.AverageSlope">
+            <summary>
+            Returns the avergage slope of the Points.
+            Calculates it once if no average slope variable currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Var">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Q1">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Q2">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Q3">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Range">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.IQ">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.MiddleOfRange">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.S">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Yule">
+            <summary>
+            FILL ME IN
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.Direction">
+            <summary>
+            Get the Direction
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.LeastSquaresLineFit">
+            <summary>
+            Returns the Least Squares line fit for the set of Points.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Slope.LeastSquaresCircleFit">
+            <summary>
+            Returns the Least Squares circle fit for the set of Points.
+            </summary>
+        </member>
+        <member name="T:Featurefy.Slope.LsqLineFit">
+            <summary>
+            Struct holding the information concerning how a least-squares line
+            fits over the given Points.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqLineFit.M">
+            <summary>
+            Slope of the least squares line.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqLineFit.B">
+            <summary>
+            Vertical shift of the least squares line.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqLineFit.Error">
+            <summary>
+            Error of the least squares line fit. (actual / theoretical) * 100
+            </summary>
+        </member>
+        <member name="T:Featurefy.Slope.LsqCircleFit">
+            <summary>
+            Struct holding the information concerning how a least-squares circle
+            fits over the given Points.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqCircleFit.X0">
+            <summary>
+            Center's x-coordinate of the least squares circle.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqCircleFit.Y0">
+            <summary>
+            Center's y-coordinate of the least squares circle.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqCircleFit.R">
+            <summary>
+            Least squares circle's radius.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Slope.LsqCircleFit.Error">
+            <summary>
+            Error of the least squares circle fit. (actual / theoretical) * 100
+            </summary>
+        </member>
+        <member name="T:Featurefy.Speed">
+            <summary>
+            Speed class. Creates a speed profile for the Points given,
+            where each Point has a speed/point value.
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.SMALL_WINDOW">
+            <summary>
+            Constant for a small end point window
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.LARGE_WINDOW">
+            <summary>
+            Constant for a large end point window
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.points">
+            <summary>
+            The Points to calculate speed information for
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.avgSpeed">
+            <summary>
+            Average speed of the Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.minSpeed">
+            <summary>
+            Minimum speed of the Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.maxSpeed">
+            <summary>
+            Maximum speed of the Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.speedProfile">
+            <summary>
+            Un-normalized speed profile of the Points
+            </summary>
+        </member>
+        <member name="F:Featurefy.Speed.normSpeedProfile">
+            <summary>
+            Normalized speed profile of the Points
+            </summary>
+        </member>
+        <member name="M:Featurefy.Speed.#ctor(Sketch.Point[])">
+            <summary>
+            Creates the speed information for a given set of Points.
+            The computations are lazy, and variables are only initialized
+            when called.
+            </summary>
+            <param name="points">Given Points</param>
+        </member>
+        <member name="M:Featurefy.Speed.distance(System.Int32,System.Int32)">
+            <summary>
+            Computes the Euclidean distance between two Points.
+            </summary>
+            <param name="a">First Point's index</param>
+            <param name="b">Second Point's index</param>
+            <returns>The Euclidean distance between the given Points</returns>
+        </member>
+        <member name="M:Featurefy.Speed.speed(System.Int32)">
+            <summary>
+            Computes the speed at the given point index by averaging from one point ahead and one behind.
+            </summary>
+            <param name="index">The point's index</param>
+            <returns>The speed at the given index</returns>
+        </member>
+        <member name="M:Featurefy.Speed.averageSpeed">
+            <summary>
+            Computes the average speed by summing up the speed at each index and dividing by n.
+            Does not take into account a certain number of Points on each end, since these
+            sections are known to be slow.
+            </summary>
+            <returns>The average speed of the stroke</returns>
+        </member>
+        <member name="M:Featurefy.Speed.calcSpeedProfile">
+            <summary>
+            Computes the speed at each point and creates a double array, where each index contains
+            that Stroke point's corresponding speed.
+            </summary>
+            <returns>The double[] array of speed</returns>
+        </member>
+        <member name="M:Featurefy.Speed.calcNormSpeedProfile">
+            <summary>
+            Computes the semi-normalized speed at each point and creates a double array, where each index contains
+            that Stroke point's corresponding speed.
+            
+            It's not a true normalization since it is more of a percentage change from the average speed.
+            </summary>
+            <returns>The double[] array of speed</returns>
+        </member>
+        <member name="M:Featurefy.Speed.smoothProfile(System.Double[])">
+            <summary>
+            Smooths the speed profile by setting the speed at each point to the average of
+            the speed for the Points immediately surrounding it.
+            </summary>
+            <param name="profile">Profile to smooth</param>
+            <returns>Smoothed profile</returns>
+        </member>
+        <member name="M:Featurefy.Speed.calcMinAndMax">
+            <summary>
+            Calculates the minimum and maximum speeds from the Points.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Speed.AverageSpeed">
+            <summary>
+            Returns the average speed of the Points.
+            Calculates it once if no average speed variable currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Speed.MinimumSpeed">
+            <summary>
+            Returns the minimum speed of the Points.
+            Calculates it once if no minimum speed variable currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Speed.MaximumSpeed">
+            <summary>
+            Returns the maximum speed of the Points.
+            Calculates it once if no maximum speed variable currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Speed.Profile">
+            <summary>
+            Returns the (un-normalized) speed profile for the Points.
+            Calculates it once if no profile currently exists.
+            </summary>
+        </member>
+        <member name="P:Featurefy.Speed.NormProfile">
+            <summary>
+            Returns the speed profile normalized by the average speed for the Points.
+            Calculates it once if no profile currently exists.
+            </summary>
+        </member>
+    </members>
+</doc>

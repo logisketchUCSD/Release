@@ -1,0 +1,6 @@
+Source
+
+Language:  C# 1.1
+IDE: Microsoft Visual Studio 2003
+
+To compile the source code, go into the application you want to compile and open the .sln file. Visual Studio should start, at which point the source can be compiled and run.
